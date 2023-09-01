@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %} Home {% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Campaign List</h1>
+<div class="search-bar">
+    <div class="input-group mb-3">
+        <input type="datetime-local" class="form-control mr-sm2" name="search" placeholder="Search for a project" id="search-content">
+        <button class="btn btn-outline-success" type="submit" id="search-btn">Search</button>
+    </div>
+   
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped table-dark">
+        <thead class="table-dark">
+            <tr>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Project Owner</th>
+                <th>Project Target</th>
+                <th>Amount Funded</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th class="text-center">Donations/Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+            <tr>
+                <td>{{ project.title }}</td>
+                <td>{{ project.details }}</td>
+                <td>{{ project.owner }}</td>
+                <td>{{ project.total_target }} EGP</td>
+                <td>{{ project.amount_donated}} EGP</td>
+                <td>{{ project.start_time|date:"Y-m-d H:i" }}</td>
+                <td>{{ project.end_time|date:"Y-m-d H:i" }}</td>
+                {% if user == project.owner %}
+                <td class="text-center">
+                    <div class="btn-group">
+                        <form method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger me-2" name="project-id" value="{{ project.id }}">Delete</button>
+                        </form>
+                        <form method="get" action="{% url 'edit_project' project.id %}">
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </form>
+                    </div>
+                </td>
+                {% else %}
+                <td class="text-center">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="number" style="margin-bottom: 4px;border-radius: 8px; border:1px solid #000; background:706C61;" name="donation_amount" placeholder="Donate Here" >
+                        <button type="submit" class="btn btn-success" name="project-id" value=" {{project.id}}">Donate</button>
+                    </form>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    const table_body = document.getElementsByTagName("tbody");
+    const search_bar = document.getElementById("search-content");
+    search_bar.addEventListener("keyup", function(event) {
+        if (event.keyCode === 13) {
+        event.preventDefault();
+        document.getElementById("search-btn").click();
+        }
+    });
+    const search_btn = document.getElementById("search-btn");
+    search_btn.addEventListener("click", (e) => {
+        const search_bar_content = search_bar.value;
+        const table_rows = table_body[0].getElementsByTagName("tr");
+        for (let i = 0; i < table_rows.length; i++) {
+            const table_data = table_rows[i].getElementsByTagName("td");
+            const start_date = table_data[5];
+            const end_date = table_data[6];
+            // "Sept. 8, 2023, 5:52 p.m." format example, we need to parse this
+            const start_date_time = Date.parse(start_date.innerText);
+            const end_date_time = Date.parse(end_date.innerText);
+            const search_date_time = Date.parse(search_bar_content);
+            if((search_date_time < end_date_time && search_date_time > start_date_time) || search_bar_content == ""){
+                table_rows[i].style.display = "";
+            } else {
+                table_rows[i].style.display = "none";
+            }
+            
+            
+        }
+    })
+</script>
+{% endblock %}
