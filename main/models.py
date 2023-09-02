@@ -40,15 +40,3 @@ class Project(models.Model):
         if self.start_time > self.end_time:
             raise ValueError("Start time must be before end time")
         super().save(*args, **kwargs)
-
-    def __str__(self):
-        return self.title + " " + self.details
-
-    def is_owner(self, user):
-        return self.owner == user
-
-    def can_edit(self, user):
-        return self.is_owner(user) and self.start_time > timezone.now()
-
-    def can_delete(self, user):
-        return self.is_owner(user) and self.start_time > timezone.now()

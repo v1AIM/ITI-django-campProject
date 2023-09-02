@@ -10,18 +10,18 @@ class RegistrationForm(UserCreationForm):
     first_name = forms.CharField(
         required=True,
         max_length=30,
-        help_text="Required. Your first name.",
+        help_text="Please Enter Your first name.",
         widget=forms.TextInput(attrs={"autocomplete": "off"}),
     )
     last_name = forms.CharField(
         required=True,
         max_length=30,
-        help_text="Required. Your last name.",
+        help_text="Please Enter Your last name.",
         widget=forms.TextInput(attrs={"autocomplete": "off"}),
     )
     email = forms.EmailField(
         required=True,
-        help_text="Required. Enter a valid email address.",
+        help_text="Please Enter a valid email address.",
         widget=forms.EmailInput(attrs={"autocomplete": "off"}),
     )
     mobile = forms.CharField(
@@ -34,7 +34,7 @@ class RegistrationForm(UserCreationForm):
             )
         ],
         widget=forms.TextInput(attrs={"type": "tel", "pattern": "[0-9]*"}),
-        help_text="Required. Your 11-digit mobile number.",
+        help_text="Please Enter Your 11-digit mobile number.",
     )
 
     class Meta:
