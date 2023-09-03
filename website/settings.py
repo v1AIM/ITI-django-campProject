@@ -83,10 +83,11 @@ WSGI_APPLICATION = "website.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "Django-ITI",
-        "USER": "Crispy",
-        "PASSWORD": "12345",
-        "HOST": "localhost",
+        "NAME": "your_database_name",
+        "USER": "your_database_user",
+        "PASSWORD": "your_database_password",
+        "HOST": "localhost",  # Set to your PostgreSQL server's host if not running locally.
+        "PORT": "",  # Leave it empty to use the default PostgreSQL port (5432).
     }
 }
 
